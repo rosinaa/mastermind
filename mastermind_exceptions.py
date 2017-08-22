@@ -1,2 +1,2 @@
 class MastermindError(Exception):
-	pass
+    pass

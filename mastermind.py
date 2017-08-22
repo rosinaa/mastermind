@@ -25,7 +25,7 @@ def feedback(maker_code, breaker_code):
 	Raises:
 		MastermindError: Error raised when the args are invalid.
 	"""
-	
+
 	# check maker_code and breaker_code validity
 	if not isinstance(maker_code, list):
 		raise MastermindError('Invalid maker code')
@@ -53,3 +53,25 @@ def feedback(maker_code, breaker_code):
 			maker_without_blacks.remove(peg)
 
 	return feedback_pegs
+
+
+
+def update_maker_code(peg, maker_code):
+	"Update the maker code and return W, to avoid duplicates"
+	maker_code[maker_code.index(peg)] = None
+	return 'W'
+
+
+def feedback_list_comprehension(maker_code, breaker_code):
+	# check maker_code and breaker_code validity
+	if not isinstance(maker_code, list):
+		raise MastermindError('Invalid maker code')
+	if not isinstance(breaker_code, list):
+		raise MastermindError('Invalid breaker code')
+	if len(maker_code) != len(breaker_code):
+		raise MastermindError("Codes have different lengths")
+
+	blacks = ['B' for original, guess in zip(maker_code, breaker_code) if original == guess]
+	whites = [update_maker_code(peg, maker_code) for peg in breaker_code if peg in maker_code]
+
+	return blacks + whites[:-len(blacks)] if len(blacks) > 0 else whites
